@@ -31,6 +31,8 @@ smallfont = pygame.font.SysFont('comicsansms', 25)
 medfont = pygame.font.SysFont('comicsansms', 50)
 largefont = pygame.font.SysFont('comicsansms', 80)
 
+list_of_directions = ['left', 'right', 'up', 'down']
+
 def game_intro():
     intro = True
     while intro:
@@ -153,21 +155,61 @@ def gameLoop():
                 gameExit = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    lead_x_change = -block_size
-                    lead_y_change = 0
-                    direction = 'left'
+                    direction = random.choice(list_of_directions)
+                    if direction == 'left':
+                        lead_x_change = -block_size
+                        lead_y_change = 0
+                    elif direction == 'right':
+                        lead_x_change = block_size
+                        lead_y_change = 0
+                    elif direction == 'up':
+                        lead_y_change = -block_size
+                        lead_x_change = 0
+                    elif direction == 'down':
+                        lead_y_change = block_size
+                        lead_x_change = 0
                 elif event.key == pygame.K_RIGHT:
-                    lead_x_change = block_size
-                    lead_y_change = 0
-                    direction = 'right'
+                    direction = random.choice(list_of_directions)
+                    if direction == 'left':
+                        lead_x_change = -block_size
+                        lead_y_change = 0
+                    elif direction == 'right':
+                        lead_x_change = block_size
+                        lead_y_change = 0
+                    elif direction == 'up':
+                        lead_y_change = -block_size
+                        lead_x_change = 0
+                    elif direction == 'down':
+                        lead_y_change = block_size
+                        lead_x_change = 0
                 elif event.key == pygame.K_UP:
-                    lead_y_change = -block_size
-                    lead_x_change = 0
-                    direction = 'up'
+                    direction = random.choice(list_of_directions)
+                    if direction == 'left':
+                        lead_x_change = -block_size
+                        lead_y_change = 0
+                    elif direction == 'right':
+                        lead_x_change = block_size
+                        lead_y_change = 0
+                    elif direction == 'up':
+                        lead_y_change = -block_size
+                        lead_x_change = 0
+                    elif direction == 'down':
+                        lead_y_change = block_size
+                        lead_x_change = 0
                 elif event.key == pygame.K_DOWN:
-                    lead_y_change = block_size
-                    lead_x_change = 0
-                    direction = 'down'
+                    direction = random.choice(list_of_directions)
+                    if direction == 'left':
+                        lead_x_change = -block_size
+                        lead_y_change = 0
+                    elif direction == 'right':
+                        lead_x_change = block_size
+                        lead_y_change = 0
+                    elif direction == 'up':
+                        lead_y_change = -block_size
+                        lead_x_change = 0
+                    elif direction == 'down':
+                        lead_y_change = block_size
+                        lead_x_change = 0
                 elif event.key == pygame.K_p:
                     pause()
 
