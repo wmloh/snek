@@ -3,6 +3,7 @@
 import pygame
 import time
 import random
+import datetime
 
 #initialize pygame module
 pygame.init()
@@ -12,26 +13,28 @@ display_height = 600
 
 block_size = 20
 AppleThickness = 30
-fps = 15
+fps = 10
 direction = 'right'
+points = 0
 
-# setting the resolution of the program, where parameter must be a tuple
 gameDisplay = pygame.display.set_mode((display_width,display_height))
-# setting the title of the program (shown on top)
 pygame.display.set_caption('Slither')
 icon = pygame.image.load('Apple.png')
 pygame.display.set_icon(icon)
 img = pygame.image.load('Snake Head.png')
 appleimg = pygame.image.load('Apple.png')
-# refresh the screen (the parameter is empty -> update all)
 pygame.display.update()
-# introduces the time (frames per second) element into the program
 clock = pygame.time.Clock()
 smallfont = pygame.font.SysFont('comicsansms', 25)
 medfont = pygame.font.SysFont('comicsansms', 50)
 largefont = pygame.font.SysFont('comicsansms', 80)
 
+
 list_of_directions = ['left', 'right', 'up', 'down']
+images = []
+
+def random_images():
+    return random.choice(images)
 
 def game_intro():
     intro = True
@@ -112,18 +115,16 @@ def message_to_screen(msg,color, y_displace = 0,size = 'small'):
     textRect.center = (display_width / 2), (display_height / 2) + y_displace
     gameDisplay.blit(textSurf, textRect)
 
-# Category: Game Loop
-# pygame.event.get() refers to event that occurring due to the user's
-# actions in real-time.
-# event.type refers to a specific event from an array of possible types
-# refer to Pygame manual for more types.
+def display_points():
+    message_to_screen(str(round(points,1)), (0,0,0), -250, size='small')
+
 def gameLoop():
     global direction
+    global points
     direction = 'right'
     gameExit = False
     gameOver = False
 
-    # int variables for the initial position of the head of the snake
     lead_x = display_width / 2
     lead_y = display_height / 2
     lead_x_change = block_size
@@ -242,12 +243,12 @@ def gameLoop():
             if lead_y > randAppleY and lead_y < randAppleY + AppleThickness or lead_y + block_size > randAppleY and lead_y + block_size < randAppleY + AppleThickness:
                 randAppleX, randAppleY = randAppleGen()
                 snakeLength += 1
+                points += 15
 
-        score(snakeLength - 1)
-
+        #score(snakeLength - 1)
+        points += 1/fps
+        display_points()
         pygame.display.update()
-        # defining the number of frames per second; refresh rate
-        # higher values indicate faster game speed
         clock.tick(fps)
 
     pygame.quit()
