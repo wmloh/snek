@@ -23,6 +23,10 @@ icon = pygame.image.load('Apple.png')
 pygame.display.set_icon(icon)
 img = pygame.image.load('Snake Head.png')
 appleimg = pygame.image.load('Apple.png')
+feridun=pygame.image.load('feridun.png')
+tompkins=pygame.image.load('tompkins.png')
+goose=pygame.image.load('goose.png')
+emblem=pygame.image.load('coat-of-arms.png') 
 pygame.display.update()
 clock = pygame.time.Clock()
 smallfont = pygame.font.SysFont('comicsansms', 25)
@@ -31,10 +35,12 @@ largefont = pygame.font.SysFont('comicsansms', 80)
 
 
 list_of_directions = ['left', 'right', 'up', 'down']
-images = []
+images = [icon, feridun, tompkins, goose, emblem]
 
 def random_images():
     return random.choice(images)
+
+initial_image = random_images()
 
 def game_intro():
     intro = True
@@ -61,7 +67,7 @@ def game_intro():
 def randAppleGen():
     randAppleX = round(random.randrange(0, display_width - AppleThickness))
     randAppleY = round(random.randrange(0, display_height - AppleThickness))
-
+    initial_image = random_images()
     return randAppleX, randAppleY
 
 def score(score):
@@ -221,7 +227,7 @@ def gameLoop():
         # alt: pygame.draw.rect(gameDisplay, (0,0,0), [400,300,10,10])
         # the function below can be graphics accelerated so it is preferred
         gameDisplay.fill((255,255,255))
-        gameDisplay.blit(appleimg, (randAppleX, randAppleY))
+        gameDisplay.blit(initial_image, (randAppleX, randAppleY))
 
         snakeHead = []
         snakeHead.append(lead_x)
