@@ -12,7 +12,7 @@ display_width = 800
 display_height = 600
 
 block_size = 20
-AppleThickness = 30
+AppleThickness = 60
 fps = 10
 direction = 'right'
 points = 0
@@ -65,6 +65,7 @@ def game_intro():
         clock.tick(5)
 
 def randAppleGen():
+    global initial_image
     randAppleX = round(random.randrange(0, display_width - AppleThickness))
     randAppleY = round(random.randrange(0, display_height - AppleThickness))
     initial_image = random_images()
