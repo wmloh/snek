@@ -8,25 +8,21 @@ import datetime
 #initialize pygame module
 pygame.init()
 
-display_width = 800
-display_height = 600
+display_width = 1366
+display_height = 768
 
 block_size = 20
 AppleThickness = 60
-fps = 10
+fps = 9
 direction = 'right'
 points = 0
 
-gameDisplay = pygame.display.set_mode((display_width,display_height))
+gameDisplay = pygame.display.set_mode((display_width,display_height), pygame.FULLSCREEN)
 pygame.display.set_caption('Slither')
 icon = pygame.image.load('Apple.png')
 pygame.display.set_icon(icon)
 img = pygame.image.load('Snake Head.png')
 appleimg = pygame.image.load('Apple.png')
-feridun=pygame.image.load('feridun.png')
-tompkins=pygame.image.load('tompkins.png')
-goose=pygame.image.load('goose.png')
-emblem=pygame.image.load('coat-of-arms.png') 
 pygame.display.update()
 clock = pygame.time.Clock()
 smallfont = pygame.font.SysFont('comicsansms', 25)
@@ -34,13 +30,15 @@ medfont = pygame.font.SysFont('comicsansms', 50)
 largefont = pygame.font.SysFont('comicsansms', 80)
 
 
-list_of_directions = ['left', 'right', 'up', 'down']
-images = [icon, feridun, tompkins, goose, emblem]
+direction_list_l = ['left', 'up', 'down']
+direction_list_r = ['right', 'up', 'down']
+direction_list_u = ['left', 'right', 'up']
+direction_list_d = ['left', 'right', 'down']
+images = []
+b_colour = (255,255,255)
 
 def random_images():
     return random.choice(images)
-
-initial_image = random_images()
 
 def game_intro():
     intro = True
@@ -65,10 +63,9 @@ def game_intro():
         clock.tick(5)
 
 def randAppleGen():
-    global initial_image
     randAppleX = round(random.randrange(0, display_width - AppleThickness))
     randAppleY = round(random.randrange(0, display_height - AppleThickness))
-    initial_image = random_images()
+
     return randAppleX, randAppleY
 
 def score(score):
@@ -128,6 +125,9 @@ def display_points():
 def gameLoop():
     global direction
     global points
+    global b_colour
+    global fps
+
     direction = 'right'
     gameExit = False
     gameOver = False
@@ -140,7 +140,10 @@ def gameLoop():
     snakeList = []
     snakeLength = 1
 
+    points = 0
     randAppleX, randAppleY = randAppleGen()
+    discolight = False
+    darkness = False
 
     while not gameExit:
         while gameOver == True:
@@ -163,7 +166,7 @@ def gameLoop():
                 gameExit = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    direction = random.choice(list_of_directions)
+                    direction = random.choice(direction_list_l)
                     if direction == 'left':
                         lead_x_change = -block_size
                         lead_y_change = 0
@@ -177,7 +180,7 @@ def gameLoop():
                         lead_y_change = block_size
                         lead_x_change = 0
                 elif event.key == pygame.K_RIGHT:
-                    direction = random.choice(list_of_directions)
+                    direction = random.choice(direction_list_r)
                     if direction == 'left':
                         lead_x_change = -block_size
                         lead_y_change = 0
@@ -191,7 +194,7 @@ def gameLoop():
                         lead_y_change = block_size
                         lead_x_change = 0
                 elif event.key == pygame.K_UP:
-                    direction = random.choice(list_of_directions)
+                    direction = random.choice(direction_list_u)
                     if direction == 'left':
                         lead_x_change = -block_size
                         lead_y_change = 0
@@ -205,7 +208,7 @@ def gameLoop():
                         lead_y_change = block_size
                         lead_x_change = 0
                 elif event.key == pygame.K_DOWN:
-                    direction = random.choice(list_of_directions)
+                    direction = random.choice(direction_list_d)
                     if direction == 'left':
                         lead_x_change = -block_size
                         lead_y_change = 0
@@ -220,15 +223,28 @@ def gameLoop():
                         lead_x_change = 0
                 elif event.key == pygame.K_p:
                     pause()
+                if event.key == pygame.K_x:
+                    if discolight == False:
+                        discolight = True
+                        darkness = False
+                        fps = 16
+                    else:
+                        discolight = False
+                        b_colour = (255,255,255)
+                        fps = 9
+                if event.key == pygame.K_z:
+                    if darkness == False:
+                        darkness = True
+                        discolight = False
+                        fps = 9
+                    else:
+                        darkness = False
+                        b_colour = (255,255,255)
 
         if lead_x >= display_width or lead_x <= 0 or lead_y >= display_height or lead_y <= 0:
             gameOver = True
-        # f(object, (R,G,B), [x-coordinate,y-coordinate,x-length,y-length])
-        # x and y -coordinates refer to the coordinate of the top left corner
-        # alt: pygame.draw.rect(gameDisplay, (0,0,0), [400,300,10,10])
-        # the function below can be graphics accelerated so it is preferred
-        gameDisplay.fill((255,255,255))
-        gameDisplay.blit(initial_image, (randAppleX, randAppleY))
+        gameDisplay.fill(b_colour)
+        gameDisplay.blit(appleimg, (randAppleX, randAppleY))
 
         snakeHead = []
         snakeHead.append(lead_x)
@@ -251,6 +267,15 @@ def gameLoop():
                 randAppleX, randAppleY = randAppleGen()
                 snakeLength += 1
                 points += 15
+
+        if discolight:
+            points += 3/fps
+            a = random.randint(0, 255)
+            b = random.randint(0, 255)
+            c = random.randint(0, 255)
+            b_colour = (a, b, c)
+        if darkness:
+            b_colour = (0, 155, 0)
 
         #score(snakeLength - 1)
         points += 1/fps
